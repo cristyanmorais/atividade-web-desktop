@@ -13,27 +13,18 @@ public class ItemVenda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
     private int quantidade;
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
     private float valor_unitario;
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
     private float valor_total;
 
     @ManyToOne
-    @JoinColumn(name="fk_venda_id")
+    @JoinColumn(name = "fk_Venda_id")
     private Venda venda;
 
     @ManyToOne
-    @JoinColumn(name="fk_produto_id")
+    @JoinColumn(name = "fk_Produto_id")
     private Produto produto;
 
     public ItemVenda() {
@@ -55,36 +46,27 @@ public class ItemVenda {
         this.id = id;
     }
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
     public int getQuantidade() {
         return quantidade;
     }
 
-    public void setQuantidade(@NotEmpty @NotNull @NotBlank int quantidade) {
+    public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
     public float getValor_unitario() {
         return valor_unitario;
     }
 
-    public void setValor_unitario(@NotEmpty @NotNull @NotBlank float valor_unitario) {
+    public void setValor_unitario(float valor_unitario) {
         this.valor_unitario = valor_unitario;
     }
 
-    @NotEmpty
-    @NotNull
-    @NotBlank
     public float getValor_total() {
         return valor_total;
     }
 
-    public void setValor_total(@NotEmpty @NotNull @NotBlank float valor_total) {
+    public void setValor_total(float valor_total) {
         this.valor_total = valor_total;
     }
 
@@ -94,5 +76,13 @@ public class ItemVenda {
 
     public void setVenda(Venda venda) {
         this.venda = venda;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
     }
 }

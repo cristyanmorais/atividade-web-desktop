@@ -26,13 +26,11 @@ public class Venda {
     @NotEmpty
     private String data;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private float total;
 
-    @OneToMany(mappedBy = "venda")
-    private Set<ItemVenda> itenvendas;
+    @ManyToOne
+    @JoinColumn(name = "fk_Cliente_id")
+    private Cliente cliente;
 
     public Venda() {
     }
@@ -68,11 +66,19 @@ public class Venda {
         this.data = data;
     }
 
-    public @NotNull @NotBlank @NotEmpty float getTotal() {
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(@NotNull @NotBlank @NotEmpty float total) {
+    public void setTotal(float total) {
         this.total = total;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

@@ -6,12 +6,15 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "CLIENTE")
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String nome;
 
@@ -22,18 +25,18 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String email, String telefone, String nome, Long id) {
+    public Cliente(String email, String telefone, String nome, Integer id) {
         this.email = email;
         this.telefone = telefone;
         this.nome = nome;
         this.id = id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

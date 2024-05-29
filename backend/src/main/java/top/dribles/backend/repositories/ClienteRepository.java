@@ -12,7 +12,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     public List<Cliente> findAll();
 
-    public Cliente findClienteById(Long id);
-
-    /*public Cliente updateCliente(Cliente cliente);*/
+    public Cliente findClienteById(long id);
 }

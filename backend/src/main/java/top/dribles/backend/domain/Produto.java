@@ -21,9 +21,6 @@ public class Produto {
     @Length(min = 3, max = 256)
     private String descricao;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private float valor;
 
     @NotNull
@@ -33,7 +30,7 @@ public class Produto {
     private String categoria;
 
     @OneToMany(mappedBy = "produto")
-    private Set<ItemVenda> itenvendas;
+    private Set<ItemVenda> itensvendas;
 
     public Produto() {
     }
@@ -61,11 +58,11 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public @NotNull @NotBlank @NotEmpty float getValor() {
+    public float getValor() {
         return valor;
     }
 
-    public void setValor(@NotNull @NotBlank @NotEmpty float valor) {
+    public void setValor(float valor) {
         this.valor = valor;
     }
 
