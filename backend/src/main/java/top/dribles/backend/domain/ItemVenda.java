@@ -1,10 +1,6 @@
 package top.dribles.backend.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "ITEM_VENDA")
@@ -36,6 +32,7 @@ public class ItemVenda {
         this.valor_unitario = valor_unitario;
         this.valor_total = valor_total;
         this.venda = venda;
+        this.produto = produto;
     }
 
     public Long getId() {

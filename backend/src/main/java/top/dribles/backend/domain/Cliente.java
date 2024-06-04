@@ -1,13 +1,10 @@
 package top.dribles.backend.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "CLIENTE")
@@ -16,10 +13,16 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank
+    @Length(min = 3, max = 100, message = "Tamanho do nome inválido.")
     private String nome;
 
+    @NotBlank
+    @Pattern(regexp = "\\d{10,11}", message = "Telefone inválido.")
     private String telefone;
 
+    @NotBlank
+    @Email(message = "Email inválido")
     private String email;
 
     public Cliente() {
