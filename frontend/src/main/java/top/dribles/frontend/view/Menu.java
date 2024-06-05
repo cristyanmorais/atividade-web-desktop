@@ -4,17 +4,29 @@
  */
 package top.dribles.frontend.view;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author crist
  */
 public class Menu extends javax.swing.JPanel {
+    
+    JPanel home = new JPanel();
+    Clientes clientes = new Clientes();
+    Produtos produtos = new Produtos();
+    Vendas vendas = new Vendas();
 
     /**
      * Creates new form Menu
      */
     public Menu() {
         initComponents();
+        tabbedPane.addTab("Home", home);
+        tabbedPane.addTab("Clientes", clientes);
+        tabbedPane.addTab("Produtos", produtos);
+        tabbedPane.addTab("Vendas", vendas);
+        
     }
 
     /**
@@ -26,54 +38,22 @@ public class Menu extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        clientesButton = new javax.swing.JButton();
-        produtosButton = new javax.swing.JButton();
-        vendasButton = new javax.swing.JButton();
-
-        clientesButton.setText("Clientes");
-        clientesButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clientesButtonActionPerformed(evt);
-            }
-        });
-
-        produtosButton.setText("Produtos");
-
-        vendasButton.setText("Vendas");
+        tabbedPane = new javax.swing.JTabbedPane();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(164, 164, 164)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(vendasButton)
-                    .addComponent(produtosButton)
-                    .addComponent(clientesButton))
-                .addContainerGap(894, Short.MAX_VALUE))
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1136, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(243, 243, 243)
-                .addComponent(clientesButton)
-                .addGap(18, 18, 18)
-                .addComponent(produtosButton)
-                .addGap(18, 18, 18)
-                .addComponent(vendasButton)
-                .addContainerGap(333, Short.MAX_VALUE))
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 681, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void clientesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientesButtonActionPerformed
-        
-    }//GEN-LAST:event_clientesButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton clientesButton;
-    private javax.swing.JButton produtosButton;
-    private javax.swing.JButton vendasButton;
+    private javax.swing.JTabbedPane tabbedPane;
     // End of variables declaration//GEN-END:variables
 }
