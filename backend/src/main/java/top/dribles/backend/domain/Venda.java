@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.hibernate.validator.constraints.Length;
 
+import java.sql.Date;
 import java.util.Set;
 
 @Entity
@@ -15,17 +17,14 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
     @Length(min = 3, max = 256)
     private String observacoes;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
-    private String data;
 
+    private Date data;
+
+    @Positive(message = "Total inválido.")
     private float total;
 
     @ManyToOne
@@ -35,7 +34,7 @@ public class Venda {
     public Venda() {
     }
 
-    public Venda(float total, String data, String observacoes, Long id) {
+    public Venda(float total, Date data, String observacoes, Long id) {
         this.total = total;
         this.data = data;
         this.observacoes = observacoes;
@@ -58,11 +57,11 @@ public class Venda {
         this.observacoes = observacoes;
     }
 
-    public @NotNull @NotBlank @NotEmpty String getData() {
+    public Date getData() {
         return data;
     }
 
-    public void setData(@NotNull @NotBlank @NotEmpty String data) {
+    public void setData(Date data) {
         this.data = data;
     }
 

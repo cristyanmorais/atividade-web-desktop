@@ -1,9 +1,7 @@
 package top.dribles.backend.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Set;
@@ -15,31 +13,28 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
-    @Length(min = 3, max = 256)
+    @Length(min = 3, max = 256, message = "Tamanho inválido de descrição.")
     private String descricao;
 
+    @Positive(message = "Valor não positivo inválido.")
     private float valor;
 
-    @NotNull
     @NotBlank
-    @NotEmpty
-    @Length(min = 5, max = 100)
+    @Length(min = 5, max = 100, message = "Tamanho inválido de categoria.")
     private String categoria;
 
-    @OneToMany(mappedBy = "produto")
-    private Set<ItemVenda> itensvendas;
+    /*@OneToMany(mappedBy = "produto")
+    private Set<ItemVenda> itensvendas;*/
 
     public Produto() {
     }
 
-    public Produto(String categoria, float valor, String descricao, Long id) {
-        this.categoria = categoria;
-        this.valor = valor;
-        this.descricao = descricao;
+    public Produto(Long id, String descricao, float valor, String categoria) {
         this.id = id;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.categoria = categoria;
     }
 
     public Long getId() {
@@ -50,27 +45,36 @@ public class Produto {
         this.id = id;
     }
 
-    public @NotNull @NotBlank @NotEmpty @Length(min = 10, max = 256) String getDescricao() {
+    public @NotBlank @Length(min = 3, max = 256, message = "Tamanho inválido de descrição") String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(@NotNull @NotBlank @NotEmpty @Length(min = 10, max = 256) String descricao) {
+    public void setDescricao(@NotBlank @Length(min = 3, max = 256, message = "Tamanho inválido de descrição") String descricao) {
         this.descricao = descricao;
     }
 
+    @Positive
     public float getValor() {
         return valor;
     }
 
-    public void setValor(float valor) {
+    public void setValor(@Positive float valor) {
         this.valor = valor;
     }
 
-    public @NotNull @NotBlank @NotEmpty @Length(min = 10, max = 100) String getCategoria() {
+    public @NotBlank @Length(min = 5, max = 100) String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(@NotNull @NotBlank @NotEmpty @Length(min = 10, max = 100) String categoria) {
+    public void setCategoria(@NotBlank @Length(min = 5, max = 100) String categoria) {
         this.categoria = categoria;
     }
+
+    /*public Set<ItemVenda> getItensvendas() {
+        return itensvendas;
+    }
+
+    public void setItensvendas(Set<ItemVenda> itensvendas) {
+        this.itensvendas = itensvendas;
+    }*/
 }

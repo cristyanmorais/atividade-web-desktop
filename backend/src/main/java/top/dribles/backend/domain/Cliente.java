@@ -28,11 +28,11 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(String email, String telefone, String nome, Integer id) {
-        this.email = email;
-        this.telefone = telefone;
-        this.nome = nome;
+    public Cliente(Integer id, String nome, String telefone, String email) {
         this.id = id;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.email = email;
     }
 
     public Integer getId() {
@@ -43,27 +43,27 @@ public class Cliente {
         this.id = id;
     }
 
-    public String getNome() {
+    public @NotBlank @Length(min = 3, max = 100, message = "Tamanho do nome inválido.") String getNome() {
         return nome;
     }
 
-    public void setNome(String nome) {
+    public void setNome(@NotBlank @Length(min = 3, max = 100, message = "Tamanho do nome inválido.") String nome) {
         this.nome = nome;
     }
 
-    public String getTelefone() {
+    public @NotBlank @Pattern(regexp = "\\d{10,11}", message = "Telefone inválido.") String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(@NotBlank @Pattern(regexp = "\\d{10,11}", message = "Telefone inválido.") String telefone) {
         this.telefone = telefone;
     }
 
-    public String getEmail() {
+    public @NotBlank @Email(message = "Email inválido") String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotBlank @Email(message = "Email inválido") String email) {
         this.email = email;
     }
 }
