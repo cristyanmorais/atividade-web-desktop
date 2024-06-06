@@ -13,15 +13,15 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    /*@NotBlank(message = "Informe o nome.")*/
     @Length(min = 3, max = 100, message = "Tamanho do nome inválido.")
     private String nome;
 
-    @NotBlank
+    /*@NotBlank(message = "Informe o telefone.")*/
     @Pattern(regexp = "\\d{10,11}", message = "Telefone inválido.")
     private String telefone;
 
-    @NotBlank
+    @NotBlank(message = "Informe o email.")
     @Email(message = "Email inválido")
     private String email;
 

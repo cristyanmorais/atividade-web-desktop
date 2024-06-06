@@ -21,7 +21,6 @@ public class Venda {
     @Length(min = 3, max = 256)
     private String observacoes;
 
-
     private Date data;
 
     @Positive(message = "Total inválido.")

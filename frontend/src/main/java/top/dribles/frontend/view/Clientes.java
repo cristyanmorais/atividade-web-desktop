@@ -4,8 +4,24 @@
  */
 package top.dribles.frontend.view;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.BufferedReader;
+import java.io.OutputStream;
+import java.lang.reflect.Type;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import top.dribles.frontend.model.Cliente;
+import top.dribles.frontend.model.ApiException;
 
 /**
  *
@@ -18,6 +34,13 @@ public class Clientes extends javax.swing.JPanel {
      */
     public Clientes() {
         initComponents();
+        
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadClientes();
+            }
+        });
     }
 
     /**
@@ -29,22 +52,255 @@ public class Clientes extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        clientesLabel = new javax.swing.JLabel();
+        cadastrarButton = new javax.swing.JButton();
+        scrollPane = new javax.swing.JScrollPane();
+        clientesTable = new javax.swing.JTable();
+        nomeTextField = new javax.swing.JTextField();
+        telefoneTextField = new javax.swing.JTextField();
+        emailTextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+
+        setForeground(new java.awt.Color(27, 137, 117));
+        setToolTipText("");
+
+        clientesLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        clientesLabel.setText("CLIENTES");
+
+        cadastrarButton.setText("Cadastrar");
+        cadastrarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastrarButtonActionPerformed(evt);
+            }
+        });
+
+        clientesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPane.setViewportView(clientesTable);
+
+        nomeTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nomeTextFieldActionPerformed(evt);
+            }
+        });
+
+        telefoneTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                telefoneTextFieldActionPerformed(evt);
+            }
+        });
+
+        emailTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                emailTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Nome");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Telefone");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Email");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1136, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(499, Short.MAX_VALUE)
+                .addComponent(clientesLabel)
+                .addGap(515, 515, 515))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 793, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(telefoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(nomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(cadastrarButton)
+                        .addGap(58, 58, 58)))
+                .addGap(43, 43, 43))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(clientesLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+                        .addGap(57, 57, 57))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(129, 129, 129)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(nomeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(telefoneTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(emailTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(cadastrarButton)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cadastrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarButtonActionPerformed
+        try {
+            String nome = nomeTextField.getText();
+            String telefone = telefoneTextField.getText();
+            String email = emailTextField.getText();
+            
+            Cliente novoCliente = new Cliente(nome, telefone, email);
+            insertCliente(novoCliente);
+            loadClientes(); // Reload the list after insertion
+            
+            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar cliente: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_cadastrarButtonActionPerformed
+
+    private void nomeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nomeTextFieldActionPerformed
+
+    private void telefoneTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_telefoneTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_telefoneTextFieldActionPerformed
+
+    private void emailTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailTextFieldActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cadastrarButton;
+    private javax.swing.JLabel clientesLabel;
+    private javax.swing.JTable clientesTable;
+    private javax.swing.JTextField emailTextField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField nomeTextField;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JTextField telefoneTextField;
     // End of variables declaration//GEN-END:variables
 
+    private List<Cliente> getAllClientes() throws IOException {
+        URL url = new URL("http://localhost:8080/cliente/all");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        
+        InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+        Gson gson = new Gson();
+        Type clienteListType = new TypeToken<List<Cliente>>() {}.getType();
+        return gson.fromJson(reader, clienteListType);
+    }
     
+    private void insertCliente(Cliente cliente) throws IOException {
+        URL url = new URL("http://localhost:8080/cliente/insert");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setDoOutput(true);
+
+        Gson gson = new Gson();
+        String jsonInputString = gson.toJson(cliente);
+        
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        int code = conn.getResponseCode();
+        if (code != 201) {
+            InputStreamReader errorReader = new InputStreamReader(conn.getErrorStream(), "utf-8");
+            BufferedReader br = new BufferedReader(errorReader);
+            StringBuilder response = new StringBuilder();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            throw new IOException(response.toString());
+        }
+        
+        clearFields();
+    }
+    
+    private void updateTable(List<Cliente> clientes) {
+        String[] columnNames = {"ID", "Nome", "Telefone", "Email"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        
+        for (Cliente cliente : clientes) {
+            Object[] row = {cliente.getId(), cliente.getNome(), cliente.getTelefone(), cliente.getEmail()};
+            model.addRow(row);
+        }
+        
+        clientesTable.setModel(model);
+    }
+    
+    private void loadClientes() {
+        try {
+            List<Cliente> clientes = getAllClientes();
+            updateTable(clientes);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar clientes: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void clearFields() {
+        nomeTextField.setText("");
+        telefoneTextField.setText("");
+        emailTextField.setText("");
+    }
+    
+    private String extractErrorMessage(IOException e) {
+    try {
+        Gson gson = new Gson();
+        ApiException apiException = gson.fromJson(e.getMessage(), ApiException.class);
+        List<String> errorList = apiException.getErrorList();
+        StringBuilder errorMessage = new StringBuilder();
+        for (String error : errorList) {
+            // Extrai apenas a mensagem da violação de restrição
+            String[] messages = error.split("messageTemplate='");
+            for (int i = 1; i < messages.length; i++) {
+                String message = messages[i].substring(0, messages[i].indexOf("'"));
+                if (!message.startsWith("{jakarta") && !message.startsWith("{org")) {
+                    errorMessage.append(message).append("\n");
+                }
+            }
+        }
+        return errorMessage.toString();
+    } catch (Exception ex) {
+        return "Erro desconhecido";
+    }
+}
     
 }

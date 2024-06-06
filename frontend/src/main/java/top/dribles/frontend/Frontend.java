@@ -14,20 +14,6 @@ import top.dribles.frontend.view.Menu;
 public class Frontend {
 
     public static void main(String[] args) {
-//        // Criar uma instância do painel ListarCliente
-//        Menu menu = new Menu();
-//        
-//        // Criar um JFrame para exibir o painel
-//        JFrame frame = new JFrame("Sua Aplicação");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        
-//        
-//        // Adicionar o painel ao JFrame
-//        frame.getContentPane().add(menu);
-//        
-//        // Configurar o tamanho e tornar visível
-//        frame.pack();
-//        frame.setLocationRelativeTo(null);
-//        frame.setVisible(true);
+        
     }
 }

@@ -4,6 +4,23 @@
  */
 package top.dribles.frontend.view;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import top.dribles.frontend.model.ApiException;
+import top.dribles.frontend.model.Produto;
+
 /**
  *
  * @author crist
@@ -15,6 +32,14 @@ public class Produtos extends javax.swing.JPanel {
      */
     public Produtos() {
         initComponents();
+        valorTextField.setText("0");
+        
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadProdutos();
+            }
+        });
     }
 
     /**
@@ -26,19 +51,252 @@ public class Produtos extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        produtosLabel = new javax.swing.JLabel();
+        scrollPane = new javax.swing.JScrollPane();
+        produtosTable = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        descricaoTextField = new javax.swing.JTextField();
+        valorTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        categoriaTextField = new javax.swing.JTextField();
+        cadastrarButton = new javax.swing.JButton();
+
+        produtosLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        produtosLabel.setText("PRODUTOS");
+
+        produtosTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPane.setViewportView(produtosTable);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Descrição");
+
+        descricaoTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                descricaoTextFieldActionPerformed(evt);
+            }
+        });
+
+        valorTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valorTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Valor");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Categoria");
+
+        categoriaTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoriaTextFieldActionPerformed(evt);
+            }
+        });
+
+        cadastrarButton.setText("Cadastrar");
+        cadastrarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastrarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1136, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 793, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(valorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(categoriaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(cadastrarButton)
+                        .addGap(58, 58, 58)))
+                .addGap(46, 46, 46))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(494, 494, 494)
+                .addComponent(produtosLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 681, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(produtosLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 552, Short.MAX_VALUE)
+                        .addGap(56, 56, 56))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(128, 128, 128)
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(descricaoTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(valorTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(categoriaTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(33, 33, 33)
+                        .addComponent(cadastrarButton)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void descricaoTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descricaoTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_descricaoTextFieldActionPerformed
+
+    private void valorTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_valorTextFieldActionPerformed
+
+    private void categoriaTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriaTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoriaTextFieldActionPerformed
+
+    private void cadastrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarButtonActionPerformed
+        try {
+            String descricao = descricaoTextField.getText();
+            float valor = Float.parseFloat(valorTextField.getText());
+            String categoria = categoriaTextField.getText();
+
+            Produto novoProduto = new Produto(descricao, valor, categoria);
+            insertProduto(novoProduto);
+            loadProdutos(); // Reload the list after insertion
+
+            JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar Produto: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_cadastrarButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cadastrarButton;
+    private javax.swing.JTextField categoriaTextField;
+    private javax.swing.JTextField descricaoTextField;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel produtosLabel;
+    private javax.swing.JTable produtosTable;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JTextField valorTextField;
     // End of variables declaration//GEN-END:variables
+
+    private List<Produto> getAllProdutos() throws IOException {
+        URL url = new URL("http://localhost:8080/produto/all");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        
+        InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+        Gson gson = new Gson();
+        Type produtoListType = new TypeToken<List<Produto>>() {}.getType();
+        return gson.fromJson(reader, produtoListType);
+    }
+    
+    private void insertProduto(Produto produto) throws IOException {
+        URL url = new URL("http://localhost:8080/produto/insert");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; utf-8");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setDoOutput(true);
+
+        Gson gson = new Gson();
+        String jsonInputString = gson.toJson(produto);
+        
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        int code = conn.getResponseCode();
+        if (code != 201) {
+            InputStreamReader errorReader = new InputStreamReader(conn.getErrorStream(), "utf-8");
+            BufferedReader br = new BufferedReader(errorReader);
+            StringBuilder response = new StringBuilder();
+            String responseLine;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            throw new IOException(response.toString());
+        }
+        
+        clearFields();
+    }
+    
+    private void updateTable(List<Produto> produtos) {
+        String[] columnNames = {"ID", "Descricao", "Valor", "Categoria"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        
+        for (Produto produto : produtos) {
+            Object[] row = {produto.getId(), produto.getDescricao(), produto.getValor(), produto.getCategoria()};
+            model.addRow(row);
+        }
+        
+        produtosTable.setModel(model);
+    }
+    
+    private void loadProdutos() {
+        try {
+            List<Produto> produtos = getAllProdutos();
+            updateTable(produtos);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar produtos: " + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void clearFields() {
+        descricaoTextField.setText("");
+        valorTextField.setText("");
+        categoriaTextField.setText("");
+    }
+    
+    private String extractErrorMessage(IOException e) {
+    try {
+        Gson gson = new Gson();
+        ApiException apiException = gson.fromJson(e.getMessage(), ApiException.class);
+        List<String> errorList = apiException.getErrorList();
+        StringBuilder errorMessage = new StringBuilder();
+        for (String error : errorList) {
+            // Extrai apenas a mensagem da violação de restrição
+            String[] messages = error.split("messageTemplate='");
+            for (int i = 1; i < messages.length; i++) {
+                String message = messages[i].substring(0, messages[i].indexOf("'"));
+                if (!message.startsWith("{jakarta") && !message.startsWith("{org")) {
+                    errorMessage.append(message).append("\n");
+                }
+            }
+        }
+        return errorMessage.toString();
+    } catch (Exception ex) {
+        return "Erro desconhecido";
+    }
+}
+
 }
