@@ -14,19 +14,14 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Length(min = 3, max = 256, message = "Tamanho inválido de descrição.")
     private String descricao;
 
     @Positive(message = "Valor não positivo inválido.")
     private float valor;
 
-    @NotBlank
     @Length(min = 5, max = 100, message = "Tamanho inválido de categoria.")
     private String categoria;
-
-    /*@OneToMany(mappedBy = "produto")
-    private Set<ItemVenda> itensvendas;*/
 
     public Produto() {
     }
@@ -70,12 +65,4 @@ public class Produto {
     public void setCategoria(@NotBlank @Length(min = 5, max = 100) String categoria) {
         this.categoria = categoria;
     }
-
-    /*public Set<ItemVenda> getItensvendas() {
-        return itensvendas;
-    }
-
-    public void setItensvendas(Set<ItemVenda> itensvendas) {
-        this.itensvendas = itensvendas;
-    }*/
 }

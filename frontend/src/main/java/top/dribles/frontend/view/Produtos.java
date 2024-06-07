@@ -190,7 +190,9 @@ public class Produtos extends javax.swing.JPanel {
 
             JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar Produto: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro inesperado ao cadastrar produto: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cadastrarButtonActionPerformed
 
@@ -223,8 +225,7 @@ public class Produtos extends javax.swing.JPanel {
         URL url = new URL("http://localhost:8080/produto/insert");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json; utf-8");
-        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
         Gson gson = new Gson();
@@ -235,16 +236,15 @@ public class Produtos extends javax.swing.JPanel {
             os.write(input, 0, input.length);
         }
 
-        int code = conn.getResponseCode();
-        if (code != 201) {
-            InputStreamReader errorReader = new InputStreamReader(conn.getErrorStream(), "utf-8");
-            BufferedReader br = new BufferedReader(errorReader);
-            StringBuilder response = new StringBuilder();
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        int responseCode = conn.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Cliente cadastrado com sucesso
+        } else {
+            try (InputStreamReader reader = new InputStreamReader(conn.getErrorStream(), "utf-8")) {
+                ApiException apiException = gson.fromJson(reader, ApiException.class);
+                String errorMessage = String.join("\n", apiException.getErrorList());
+                throw new IOException(errorMessage);
             }
-            throw new IOException(response.toString());
         }
         
         clearFields();
@@ -277,26 +277,7 @@ public class Produtos extends javax.swing.JPanel {
         categoriaTextField.setText("");
     }
     
-    private String extractErrorMessage(IOException e) {
-    try {
-        Gson gson = new Gson();
-        ApiException apiException = gson.fromJson(e.getMessage(), ApiException.class);
-        List<String> errorList = apiException.getErrorList();
-        StringBuilder errorMessage = new StringBuilder();
-        for (String error : errorList) {
-            // Extrai apenas a mensagem da violação de restrição
-            String[] messages = error.split("messageTemplate='");
-            for (int i = 1; i < messages.length; i++) {
-                String message = messages[i].substring(0, messages[i].indexOf("'"));
-                if (!message.startsWith("{jakarta") && !message.startsWith("{org")) {
-                    errorMessage.append(message).append("\n");
-                }
-            }
-        }
-        return errorMessage.toString();
-    } catch (Exception ex) {
-        return "Erro desconhecido";
+    private String extractErrorMessage(Exception e) {
+        return e.getMessage();
     }
-}
-
 }

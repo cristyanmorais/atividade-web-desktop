@@ -175,14 +175,16 @@ public class Clientes extends javax.swing.JPanel {
             String nome = nomeTextField.getText();
             String telefone = telefoneTextField.getText();
             String email = emailTextField.getText();
-            
+
             Cliente novoCliente = new Cliente(nome, telefone, email);
             insertCliente(novoCliente);
             loadClientes(); // Reload the list after insertion
-            
+        
             JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Erro ao cadastrar cliente: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro inesperado ao cadastrar cliente: \n" + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_cadastrarButtonActionPerformed
 
@@ -227,31 +229,27 @@ public class Clientes extends javax.swing.JPanel {
         URL url = new URL("http://localhost:8080/cliente/insert");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json; utf-8");
-        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
 
         Gson gson = new Gson();
         String jsonInputString = gson.toJson(cliente);
-        
+
         try (OutputStream os = conn.getOutputStream()) {
             byte[] input = jsonInputString.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
-        int code = conn.getResponseCode();
-        if (code != 201) {
-            InputStreamReader errorReader = new InputStreamReader(conn.getErrorStream(), "utf-8");
-            BufferedReader br = new BufferedReader(errorReader);
-            StringBuilder response = new StringBuilder();
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+        int responseCode = conn.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Cliente cadastrado com sucesso
+        } else {
+            try (InputStreamReader reader = new InputStreamReader(conn.getErrorStream(), "utf-8")) {
+                ApiException apiException = gson.fromJson(reader, ApiException.class);
+                String errorMessage = String.join("\n", apiException.getErrorList());
+                throw new IOException(errorMessage);
             }
-            throw new IOException(response.toString());
         }
-        
-        clearFields();
     }
     
     private void updateTable(List<Cliente> clientes) {
@@ -281,26 +279,7 @@ public class Clientes extends javax.swing.JPanel {
         emailTextField.setText("");
     }
     
-    private String extractErrorMessage(IOException e) {
-    try {
-        Gson gson = new Gson();
-        ApiException apiException = gson.fromJson(e.getMessage(), ApiException.class);
-        List<String> errorList = apiException.getErrorList();
-        StringBuilder errorMessage = new StringBuilder();
-        for (String error : errorList) {
-            // Extrai apenas a mensagem da violação de restrição
-            String[] messages = error.split("messageTemplate='");
-            for (int i = 1; i < messages.length; i++) {
-                String message = messages[i].substring(0, messages[i].indexOf("'"));
-                if (!message.startsWith("{jakarta") && !message.startsWith("{org")) {
-                    errorMessage.append(message).append("\n");
-                }
-            }
-        }
-        return errorMessage.toString();
-    } catch (Exception ex) {
-        return "Erro desconhecido";
+    private String extractErrorMessage(Exception e) {
+        return e.getMessage();
     }
-}
-    
 }
