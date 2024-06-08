@@ -4,17 +4,53 @@
  */
 package top.dribles.frontend.view;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import top.dribles.frontend.model.Cliente;
+import top.dribles.frontend.model.ItemVenda;
+import top.dribles.frontend.model.Produto;
+import top.dribles.frontend.model.Venda;
+import top.dribles.frontend.model.Venda;
+import top.dribles.frontend.view.tablemodel.ItemVendaTableModel;
+
 /**
  *
  * @author crist
  */
 public class Vendas extends javax.swing.JPanel {
+    
+    private List<ItemVenda> itensVenda;
+    private ItemVendaTableModel itemVendaTableModel;
 
     /**
      * Creates new form Vendas
      */
     public Vendas() {
         initComponents();
+        
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
+                loadVendas();
+                loadClientes();
+                loadProdutos();
+            }
+        });
+        
+        itensVenda = new ArrayList<>();
+        itemVendaTableModel = new ItemVendaTableModel(itensVenda);
+        itemVendaTable.setModel(itemVendaTableModel);
     }
 
     /**
@@ -26,19 +62,360 @@ public class Vendas extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        vendasLabel = new javax.swing.JLabel();
+        scrollPane = new javax.swing.JScrollPane();
+        vendasTable = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        observacoesTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        dataTextField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        cadastrarButton = new javax.swing.JButton();
+        clientesComboBox = new javax.swing.JComboBox<>();
+        scrollPane1 = new javax.swing.JScrollPane();
+        itemVendaTable = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        produtosComboBox = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        valorUnitarioTextField = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        quantidadeTextField = new javax.swing.JTextField();
+        adicionarButton = new javax.swing.JButton();
+
+        vendasLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        vendasLabel.setText("VENDAS");
+
+        vendasTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPane.setViewportView(vendasTable);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setText("Observações");
+
+        observacoesTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                observacoesTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setText("Data");
+
+        dataTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dataTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Cliente");
+
+        cadastrarButton.setText("Cadastrar");
+        cadastrarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastrarButtonActionPerformed(evt);
+            }
+        });
+
+        clientesComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+
+        itemVendaTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        scrollPane1.setViewportView(itemVendaTable);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("Produto");
+
+        produtosComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel5.setText("Valor Unitário");
+
+        valorUnitarioTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valorUnitarioTextFieldActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setText("Quantidade");
+
+        quantidadeTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                quantidadeTextFieldActionPerformed(evt);
+            }
+        });
+
+        adicionarButton.setText("Adicionar");
+        adicionarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adicionarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1114, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(507, 507, 507)
+                        .addComponent(vendasLabel))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(scrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(36, 36, 36)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel4)
+                                            .addComponent(produtosComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(valorUnitarioTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                .addComponent(jLabel5))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(dataTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                .addComponent(jLabel2)))
+                                        .addGap(18, 18, 18))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(quantidadeTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(adicionarButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addGap(59, 59, 59)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cadastrarButton)
+                                    .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(observacoesTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                            .addComponent(jLabel1))
+                                        .addGap(33, 33, 33))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(191, 191, 191)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(clientesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 664, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(vendasLabel)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(scrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(produtosComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(valorUnitarioTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(quantidadeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(adicionarButton)))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(observacoesTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(18, 18, 18)
+                                .addComponent(dataTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(clientesComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addComponent(cadastrarButton))
+                    .addComponent(scrollPane))
+                .addGap(56, 56, 56))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void observacoesTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_observacoesTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_observacoesTextFieldActionPerformed
+
+    private void dataTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dataTextFieldActionPerformed
+
+    private void cadastrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastrarButtonActionPerformed
+        
+    }//GEN-LAST:event_cadastrarButtonActionPerformed
+
+    private void valorUnitarioTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valorUnitarioTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_valorUnitarioTextFieldActionPerformed
+
+    private void quantidadeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantidadeTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_quantidadeTextFieldActionPerformed
+
+    private void adicionarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarButtonActionPerformed
+        adicionarItemVenda();
+    }//GEN-LAST:event_adicionarButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton adicionarButton;
+    private javax.swing.JButton cadastrarButton;
+    private javax.swing.JComboBox<String> clientesComboBox;
+    private javax.swing.JTextField dataTextField;
+    private javax.swing.JTable itemVendaTable;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField observacoesTextField;
+    private javax.swing.JComboBox<String> produtosComboBox;
+    private javax.swing.JTextField quantidadeTextField;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JScrollPane scrollPane1;
+    private javax.swing.JTextField valorUnitarioTextField;
+    private javax.swing.JLabel vendasLabel;
+    private javax.swing.JTable vendasTable;
     // End of variables declaration//GEN-END:variables
+
+    private void adicionarItemVenda() {
+        String quantidade = quantidadeTextField.getText();
+        String valorUnitario = valorUnitarioTextField.getText();
+        int indiceProdutoSelecionado = produtosComboBox.getSelectedIndex();
+        
+        if (quantidade.isEmpty() || valorUnitario.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            int quantidadeInt = Integer.parseInt(quantidade);
+            double valorUnitarioDouble = Double.parseDouble(valorUnitario);
+            double valorTotalDouble = valorUnitarioDouble * quantidadeInt;
+            
+            if (produtosComboBox.getSelectedIndex() == 0) {
+                JOptionPane.showMessageDialog(this, "Por favor, selecione um produto.", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Os campos 'Quantidade', 'Valor Unitário' e 'Desc. Unitário' devem ser números.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadVendas() {
+        try {
+            List<Venda> vendas = getAllVendas();
+            updateTable(vendas);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar vendas: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadClientes() {
+        try {
+            List<Cliente> clientes = getAllClientes();
+            
+            for (Cliente cliente : clientes) {
+                clientesComboBox.addItem(cliente.getNome());
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar Clientes: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void loadProdutos() {
+        try {
+            List<Produto> produtos = getAllProdutos();
+            
+            for (Produto produto : produtos) {
+                produtosComboBox.addItem(produto.getDescricao());
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar Produtos: \n" + extractErrorMessage(e), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private List<Venda> getAllVendas() throws IOException {
+        URL url = new URL("http://localhost:8080/venda/all");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        
+        InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+        Gson gson = new Gson();
+        Type vendaListType = new TypeToken<List<Venda>>() {}.getType();
+        return gson.fromJson(reader, vendaListType);
+    }
+    
+    private List<Cliente> getAllClientes() throws IOException {
+        URL url = new URL("http://localhost:8080/cliente/all");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        
+        InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+        Gson gson = new Gson();
+        Type clienteListType = new TypeToken<List<Cliente>>() {}.getType();
+        return gson.fromJson(reader, clienteListType);
+    }
+    
+    private List<Produto> getAllProdutos() throws IOException {
+        URL url = new URL("http://localhost:8080/produto/all");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        
+        InputStreamReader reader = new InputStreamReader(conn.getInputStream());
+        Gson gson = new Gson();
+        Type produtoListType = new TypeToken<List<Produto>>() {}.getType();
+        return gson.fromJson(reader, produtoListType);
+    }
+    
+    private void updateTable(List<Venda> vendas) {
+        String[] columnNames = {"ID", "Observações", "Data", "Total"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+        
+        for (Venda venda : vendas) {
+            Object[] row = {venda.getId(), venda.getObservacoes(), venda.getData(), venda.getTotal()};
+            model.addRow(row);
+        }
+        
+        vendasTable.setModel(model);
+    }
+    
+    private String extractErrorMessage(Exception e) {
+        return e.getMessage();
+    }
 }

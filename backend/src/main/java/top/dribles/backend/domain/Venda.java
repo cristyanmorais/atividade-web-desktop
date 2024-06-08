@@ -1,7 +1,6 @@
 package top.dribles.backend.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -17,7 +16,6 @@ public class Venda {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Length(min = 3, max = 256)
     private String observacoes;
 
@@ -48,11 +46,11 @@ public class Venda {
         this.id = id;
     }
 
-    public @NotNull @NotBlank @NotEmpty @Length(min = 10, max = 256) String getObservacoes() {
+    public @NotNull @NotEmpty @Length(min = 10, max = 256) String getObservacoes() {
         return observacoes;
     }
 
-    public void setObservacoes(@NotNull @NotBlank @NotEmpty @Length(min = 10, max = 256) String observacoes) {
+    public void setObservacoes(@NotNull @NotEmpty @Length(min = 10, max = 256) String observacoes) {
         this.observacoes = observacoes;
     }
 
