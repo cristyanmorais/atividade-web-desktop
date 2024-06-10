@@ -21,12 +21,12 @@ public class ItemVenda {
     private float valor_total;
 
     @ManyToOne
-    @JoinColumn(name = "fk_Venda_id")
+    @JoinColumn(name = "fk_Venda_id", nullable = false)
     @NotNull
     private Venda venda;
 
     @ManyToOne
-    @JoinColumn(name = "fk_Produto_id")
+    @JoinColumn(name = "fk_Produto_id", nullable = false)
     @NotNull
     private Produto produto;
 
@@ -77,19 +77,19 @@ public class ItemVenda {
         this.valor_total = valor_total;
     }
 
-    public Venda getVenda() {
+    public @NotNull Venda getVenda() {
         return venda;
     }
 
-    public void setVenda(Venda venda) {
+    public void setVenda(@NotNull Venda venda) {
         this.venda = venda;
     }
 
-    public Produto getProduto() {
+    public @NotNull Produto getProduto() {
         return produto;
     }
 
-    public void setProduto(Produto produto) {
+    public void setProduto(@NotNull Produto produto) {
         this.produto = produto;
     }
 }

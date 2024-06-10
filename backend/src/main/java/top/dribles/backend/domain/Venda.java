@@ -1,12 +1,8 @@
 package top.dribles.backend.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.Length;
-
-import java.sql.Date;
 import java.util.Set;
 
 @Entity
@@ -14,14 +10,16 @@ import java.util.Set;
 public class Venda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @Length(min = 3, max = 256)
+    @Length(max = 256, message = "Tamanho de Observação Inválido")
     private String observacoes;
 
-    private Date data;
+    @NotNull(message = "Informe a Data.")
+    @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "A data deve estar no formato yyyy-MM-dd.")
+    private String data;
 
-    @Positive(message = "Total inválido.")
+    @Positive(message = "Informe pelo menos um Item na Venda.")
     private float total;
 
     @ManyToOne
@@ -31,34 +29,34 @@ public class Venda {
     public Venda() {
     }
 
-    public Venda(float total, Date data, String observacoes, Long id) {
+    public Venda(float total, String data, String observacoes, long id) {
         this.total = total;
         this.data = data;
         this.observacoes = observacoes;
         this.id = id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public @NotNull @NotEmpty @Length(min = 10, max = 256) String getObservacoes() {
+    public @NotNull @NotEmpty @Length(max = 256) String getObservacoes() {
         return observacoes;
     }
 
-    public void setObservacoes(@NotNull @NotEmpty @Length(min = 10, max = 256) String observacoes) {
+    public void setObservacoes(@NotNull @NotEmpty @Length(max = 256) String observacoes) {
         this.observacoes = observacoes;
     }
 
-    public Date getData() {
+    public @NotNull(message = "Informe a Data.") @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "A data deve estar no formato yyyy-MM-dd.") String getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(@NotNull(message = "Informe a Data.") @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "A data deve estar no formato yyyy-MM-dd.") String data) {
         this.data = data;
     }
 
@@ -70,11 +68,11 @@ public class Venda {
         this.total = total;
     }
 
-    public Cliente getCliente() {
+    public @NotNull(message = "not null venda") Cliente getCliente() {
         return cliente;
     }
 
-    public void setCliente(Cliente cliente) {
+    public void setCliente(@NotNull(message = "not null venda") Cliente cliente) {
         this.cliente = cliente;
     }
 }
